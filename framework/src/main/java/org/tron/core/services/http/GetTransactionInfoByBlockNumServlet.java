@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.tron.api.GrpcAPI.NumberMessage;
 import org.tron.api.GrpcAPI.TransactionInfoList;
 import org.tron.core.Wallet;
@@ -16,6 +18,8 @@ import org.tron.core.vm.utils.MUtil;
 import org.tron.protos.Protocol.TransactionInfo;
 import org.tron.protos.Protocol.TransactionInfo.Log;
 
+@Component
+@Slf4j(topic = "API")
 public class GetTransactionInfoByBlockNumServlet extends RateLimiterServlet {
 
   @Autowired
