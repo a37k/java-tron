@@ -81,6 +81,7 @@ import org.tron.api.GrpcAPI.SpendResult;
 import org.tron.api.GrpcAPI.TransactionApprovedList;
 import org.tron.api.GrpcAPI.TransactionExtention;
 import org.tron.api.GrpcAPI.TransactionExtention.Builder;
+import org.tron.api.GrpcAPI.TransactionInfoList;
 import org.tron.api.GrpcAPI.TransactionSignWeight;
 import org.tron.api.GrpcAPI.TransactionSignWeight.Result;
 import org.tron.api.GrpcAPI.WitnessList;
@@ -123,12 +124,14 @@ import org.tron.core.capsule.ProposalCapsule;
 import org.tron.core.capsule.TransactionCapsule;
 import org.tron.core.capsule.TransactionInfoCapsule;
 import org.tron.core.capsule.TransactionResultCapsule;
+import org.tron.core.capsule.TransactionRetCapsule;
 import org.tron.core.capsule.WitnessCapsule;
 import org.tron.core.config.args.Args;
 import org.tron.core.db.BandwidthProcessor;
 import org.tron.core.db.EnergyProcessor;
 import org.tron.core.db.Manager;
 import org.tron.core.db.TransactionContext;
+import org.tron.core.db.TransactionRetStore;
 import org.tron.core.exception.AccountResourceInsufficientException;
 import org.tron.core.exception.BadItemException;
 import org.tron.core.exception.ContractExeException;
@@ -1420,6 +1423,23 @@ public class Wallet {
     }
 
     return transactionInfoCapsule == null ? null : transactionInfoCapsule.getInstance();
+  }
+
+  public TransactionInfoList getTransactionInfoByBlockNum(long blockNum) {
+    TransactionInfoList.Builder transactionInfoList = TransactionInfoList.newBuilder();
+    TransactionRetCapsule result = null;
+    try {
+      result = dbManager.getTransactionRetStore()
+          .getTransactionInfoByBlockNum(ByteArray.fromLong(blockNum));
+    } catch (BadItemException e) {
+    }
+
+    if (!Objects.isNull(result) && !Objects.isNull(result.getInstance())) {
+      result.getInstance().getTransactioninfoList().forEach(
+          transactionInfo -> transactionInfoList.addTransactionInfo(transactionInfo));
+    }
+
+    return transactionInfoList.build();
   }
 
   public Proposal getProposalById(ByteString proposalId) {

@@ -64,6 +64,7 @@ import org.tron.api.GrpcAPI.SpendAuthSigParameters;
 import org.tron.api.GrpcAPI.SpendResult;
 import org.tron.api.GrpcAPI.TransactionApprovedList;
 import org.tron.api.GrpcAPI.TransactionExtention;
+import org.tron.api.GrpcAPI.TransactionInfoList;
 import org.tron.api.GrpcAPI.TransactionList;
 import org.tron.api.GrpcAPI.TransactionListExtention;
 import org.tron.api.GrpcAPI.TransactionSignWeight;
@@ -591,6 +592,13 @@ public class RpcApiService implements Service {
       } else {
         responseObserver.onNext(null);
       }
+      responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getTransactionInfoByBlockNum(NumberMessage request,
+        StreamObserver<TransactionInfoList> responseObserver) {
+      responseObserver.onNext(wallet.getTransactionInfoByBlockNum(request.getNum()));
       responseObserver.onCompleted();
     }
 
