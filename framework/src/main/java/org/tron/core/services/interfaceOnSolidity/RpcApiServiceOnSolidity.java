@@ -340,7 +340,6 @@ public class RpcApiServiceOnSolidity implements Service {
           () -> rpcApiService.getWalletSolidityApi()
               .getTransactionInfoById(request, responseObserver)
       );
-
     }
 
     @Override

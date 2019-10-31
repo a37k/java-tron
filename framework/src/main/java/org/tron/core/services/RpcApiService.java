@@ -1844,6 +1844,13 @@ public class RpcApiService implements Service {
     }
 
     @Override
+    public void getTransactionInfoByBlockNum(NumberMessage request,
+        StreamObserver<TransactionInfoList> responseObserver) {
+      responseObserver.onNext(wallet.getTransactionInfoByBlockNum(request.getNum()));
+      responseObserver.onCompleted();
+    }
+
+    @Override
     public void getNodeInfo(EmptyMessage request, StreamObserver<NodeInfo> responseObserver) {
       try {
         responseObserver.onNext(nodeInfoService.getNodeInfo().transferToProtoEntity());
